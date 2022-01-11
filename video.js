@@ -15,13 +15,15 @@ module.exports = async ({ content_id, content_title, dir }) => {
     'https://weblearn.kaikeba.com/student/course/content?content_id=' +
     content_id
   const contentRet = await httpUtil.get(contentUrl, {
-    auth: {
-      bearer,
-    },
+    url: contentUrl,
     json: true,
+    headers: {
+      'Authorization': bearer,
+      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
+    }
   })
   const title = `${contentRet.data.location.chapter.desc} ${contentRet.data.location.section.desc} ${contentRet.data.content_title}`
-  //console.log(title)
+  console.log('JOE_title: ' + title)
   const boot_params = contentRet.data.content[0].boot_params
   let mediaId = boot_params.mediaId ? boot_params.mediaId : boot_params.media_id
 

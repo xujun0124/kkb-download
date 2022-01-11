@@ -1,4 +1,4 @@
 module.exports = {
-  bearer: 'pc:eae2f8bdd4ad9a439856b00f21008763',
-  dir: '/Users/seven/Downloads/kkb1',
+  bearer: 'Bearer pc:301bec30392c8b9c4463682a4a036223',
+  dir: '/Users/i530994/Downloads/kkb1',
 }

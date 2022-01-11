@@ -6,19 +6,22 @@ const section = require('./section')
 const { withSpinner } = require('./oraUtil')
 module.exports = async ({ course_id, course_name }) => {
   const chapterUrl = `https://weblearn.kaikeba.com/student/courseinfo?course_id=${course_id}`
-  const chapterRet = await httpUtil.get(chapterUrl, {
-    auth: {
-      bearer,
-    },
+  const chapterRet = await httpUtil.get( {
+    url: chapterUrl,
     json: true,
+    headers: {
+      'Authorization': bearer,
+      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
+    }
   })
-  const data = chapterRet.data.chapter_list.slice(0, 2)
+  console.log('JOE_ChapterList: ' + chapterRet.data.chapter_list.length)
+
+  const data = chapterRet.data.chapter_list.slice(0, chapterRet.data.chapter_list.length)
   for (let i = 0; i < data.length; i++) {
     const chapter = data[i]
+    console.log('JOE_chapter: ' + chapter)
     const dirpath = path.join(dir, course_name, chapter.chapter_name)
-    if (fs.existsSync(dirpath)) {
-      break
-    } else {
+    if (!fs.existsSync(dirpath)) {
       fs.mkdirSync(dirpath)
     }
     // global.spinnies.add(' ' + chapter.chapter_name)

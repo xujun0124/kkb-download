@@ -12,15 +12,20 @@ module.exports = async ({
   chapter_name,
 }) => {
   const sectionUrl = `https://weblearn.kaikeba.com/student/chapterinfo?course_id=${course_id}&chapter_id=${chapter_id}`
-  const sectionRet = await httpUtil.get(sectionUrl, {
-    auth: {
-      bearer,
-    },
+  const sectionRet = await httpUtil.get( {
+    url: sectionUrl,
     json: true,
+    headers: {
+      'Authorization': bearer,
+      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
+    }
   })
-  const data = sectionRet.data.section_list.slice(0, 2)
+
+  console.log('JOE_SectionList: ' + sectionRet.data.section_list.length)
+  const data = sectionRet.data.section_list.slice(0, sectionRet.data.section_list.length)
   for (let i = 0; i < data.length; i++) {
     const { group_list } = data[i]
+    console.log('JOE_group_list: ' + group_list.length)
     if (!group_list || group_list.length < 1) {
       break
     }
@@ -31,9 +36,7 @@ module.exports = async ({
       chapter_name,
       group.group_name
     )
-    if (fs.existsSync(sectionPath)) {
-      break
-    } else {
+    if (!fs.existsSync(sectionPath)) {
       fs.mkdirSync(sectionPath)
     }
     // global.spinnies.add('   ' + group.group_name)
